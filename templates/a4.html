@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Parko.ir - Camera Details</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0b50da",
+                        "primary-hover": "#0943b8",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101622",
+                        "panel-dark": "#1a2234",
+                        "border-dark": "#2d3a54",
+                        "text-secondary": "#90a4cb",
+                        "success": "#10b981",
+                        "danger": "#ef4444",
+                        "warning": "#f59e0b",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"],
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for log panels */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #2d3a54;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #3b4d6e;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display h-screen flex overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 bg-background-dark border-r border-border-dark flex-shrink-0 flex flex-col hidden md:flex">
+<div class="p-6">
+<h1 class="text-white text-xl font-bold tracking-tight">Parko.ir</h1>
+<p class="text-text-secondary text-xs mt-1">Admin Panel v2.4</p>
+</div>
+<nav class="flex-1 px-4 space-y-2">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary hover:bg-panel-dark hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary border border-primary/20" href="#">
+<span class="material-symbols-outlined font-variation-settings-FILL-1">videocam</span>
+<span class="text-sm font-medium">Cameras</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary hover:bg-panel-dark hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="text-sm font-medium">Map View</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary hover:bg-panel-dark hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-sm font-medium">Analytics</span>
+</a>
+<div class="pt-4 pb-2">
+<p class="px-3 text-xs font-semibold text-text-secondary uppercase tracking-wider">System</p>
+</div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary hover:bg-panel-dark hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="text-sm font-medium">Alerts</span>
+<span class="ml-auto bg-danger text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">3</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary hover:bg-panel-dark hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-border-dark">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-purple-500 flex items-center justify-center text-xs font-bold text-white">
+                    AD
+                </div>
+<div>
+<p class="text-sm font-medium text-white">Admin User</p>
+<p class="text-xs text-text-secondary">admin@parko.ir</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full relative overflow-hidden">
+<!-- Header -->
+<header class="h-16 border-b border-border-dark bg-background-dark/95 backdrop-blur flex items-center justify-between px-6 z-10 shrink-0">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex flex-col">
+<div class="flex items-center gap-2 text-text-secondary text-xs mb-0.5">
+<span>Cameras</span>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<span>North Sector</span>
+</div>
+<h2 class="text-white text-lg font-bold leading-tight flex items-center gap-3">
+                        CAM-04: North Gate Entrance
+                        <span class="flex h-2 w-2 rounded-full bg-success animate-pulse"></span>
+</h2>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-panel-dark border border-border-dark">
+<span class="w-2 h-2 rounded-full bg-success"></span>
+<span class="text-xs font-medium text-white">Status: Online</span>
+<span class="w-px h-3 bg-border-dark mx-1"></span>
+<span class="text-xs text-text-secondary">IP: 192.168.1.45</span>
+</div>
+<button class="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+<span>Config</span>
+</button>
+</div>
+</header>
+<!-- Dashboard Grid -->
+<div class="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
+<!-- Left Column: Diagnostics (3 cols) -->
+<div class="lg:col-span-3 flex flex-col gap-6 h-auto">
+<!-- Network Stats -->
+<div class="bg-panel-dark border border-border-dark rounded-xl p-5 shadow-sm">
+<h3 class="text-white text-sm font-semibold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">network_check</span>
+                            Stream Health
+                        </h3>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-text-secondary">Bitrate</span>
+<span class="text-white font-mono">4096 kbps</span>
+</div>
+<div class="w-full bg-background-dark rounded-full h-1.5 overflow-hidden">
+<div class="bg-success h-full rounded-full" style="width: 85%"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-2">
+<div class="bg-background-dark rounded-lg p-3 border border-border-dark">
+<p class="text-text-secondary text-[10px] uppercase font-bold tracking-wider">Packet Loss</p>
+<p class="text-white text-lg font-bold mt-1">0.01%</p>
+</div>
+<div class="bg-background-dark rounded-lg p-3 border border-border-dark">
+<p class="text-text-secondary text-[10px] uppercase font-bold tracking-wider">FPS</p>
+<p class="text-white text-lg font-bold mt-1">30</p>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-border-dark">
+<span class="text-xs text-text-secondary">Uptime</span>
+<span class="text-xs font-mono text-white">24d 05h 12m</span>
+</div>
+</div>
+</div>
+<!-- Log Console -->
+<div class="bg-panel-dark border border-border-dark rounded-xl shadow-sm flex-1 flex flex-col min-h-[300px] overflow-hidden">
+<div class="px-4 py-3 border-b border-border-dark flex items-center justify-between bg-panel-dark">
+<h3 class="text-white text-sm font-semibold">System Logs</h3>
+<div class="flex gap-1">
+<button class="p-1 hover:bg-background-dark rounded text-text-secondary hover:text-white">
+<span class="material-symbols-outlined text-[16px]">refresh</span>
+</button>
+<button class="p-1 hover:bg-background-dark rounded text-text-secondary hover:text-white">
+<span class="material-symbols-outlined text-[16px]">download</span>
+</button>
+</div>
+</div>
+<div class="flex-1 bg-[#0c111a] p-3 overflow-y-auto custom-scrollbar font-mono text-[11px] leading-relaxed">
+<div class="text-text-secondary mb-1"><span class="text-blue-400">[14:20:01]</span> Connected to RTSP stream</div>
+<div class="text-text-secondary mb-1"><span class="text-blue-400">[14:20:05]</span> <span class="text-yellow-400">WARN</span> Bitrate fluctuation detected</div>
+<div class="text-text-secondary mb-1"><span class="text-blue-400">[14:21:12]</span> ONVIF: Move command sent (Pan: 10, Tilt: 0)</div>
+<div class="text-text-secondary mb-1"><span class="text-blue-400">[14:21:14]</span> ONVIF: Focus command executed</div>
+<div class="text-text-secondary mb-1"><span class="text-blue-400">[14:22:30]</span> ALPR: Plate detected "HRT-789"</div>
+<div class="text-text-secondary mb-1"><span class="text-blue-400">[14:23:45]</span> User Admin took PTZ control</div>
+<div class="text-text-secondary mb-1"><span class="text-blue-400">[14:24:01]</span> Snapshot captured</div>
+<div class="text-text-secondary mb-1"><span class="text-blue-400">[14:25:10]</span> <span class="text-red-400">ERR</span> Packet dropped (Seq: 4432)</div>
+<div class="text-text-secondary mb-1"><span class="text-blue-400">[14:26:12]</span> ONVIF: Move command sent (Pan: -5, Tilt: 2)</div>
+<div class="text-white mb-1"> &gt; _</div>
+</div>
+<div class="p-2 border-t border-border-dark bg-panel-dark">
+<div class="flex gap-2">
+<span class="px-2 py-1 rounded bg-blue-900/30 text-blue-400 text-[10px] border border-blue-900/50 cursor-pointer">INFO</span>
+<span class="px-2 py-1 rounded bg-yellow-900/30 text-yellow-400 text-[10px] border border-yellow-900/50 cursor-pointer">WARN</span>
+<span class="px-2 py-1 rounded bg-red-900/30 text-red-400 text-[10px] border border-red-900/50 cursor-pointer">ERR</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Center Column: Video Feed (6 cols) -->
+<div class="lg:col-span-6 flex flex-col gap-6">
+<!-- Video Player Container -->
+<div class="relative bg-black rounded-xl overflow-hidden aspect-video shadow-lg group border border-border-dark">
+<!-- Video Placeholder -->
+<div class="absolute inset-0 bg-cover bg-center opacity-80" data-alt="CCTV view of a parking lot entrance with cars and barrier gate" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAfbB-Y-esrBhb5BdWKUv9i_mztGVumMMKgrC-K_1L0qesoZMIYXEwcyncHr8tjprVY7pwvNZYN6YG1c0BeVsRICuduO8SHvUzrczKLHzfqAv8QpWh6NeM1S_MqGxF_SzbSVMycBABAQMGKVwxoOgARYtbiEjD5HKY9papGZdjj5fd1CPAsdvA__rebn3F_RZkNCiAe6tv6KMPa0YPwtjB5PPAM02QebTRCoPlWHnCVCpYrPP8Av_X0XE94emsQ_Ye1ddROrJVDnQSR');"></div>
+<!-- Overlays -->
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1 animate-pulse">
+<span class="w-1.5 h-1.5 bg-white rounded-full"></span> LIVE
+                            </span>
+<span class="bg-black/60 backdrop-blur text-white text-[10px] font-medium px-2 py-0.5 rounded border border-white/10">
+                                1920x1080
+                            </span>
+</div>
+<div class="absolute top-4 right-4">
+<span class="bg-black/60 backdrop-blur text-white text-[10px] font-medium px-2 py-0.5 rounded border border-white/10 flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">wifi</span> 45ms
+                            </span>
+</div>
+<!-- Hover Controls (Always visible in this mock for clarity) -->
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 flex items-end justify-between transition-opacity">
+<div class="flex items-center gap-3">
+<button class="text-white hover:text-primary transition-colors">
+<span class="material-symbols-outlined font-variation-settings-FILL-1">pause</span>
+</button>
+<button class="text-white hover:text-primary transition-colors">
+<span class="material-symbols-outlined">volume_up</span>
+</button>
+<span class="text-white/70 text-xs font-mono">LIVE</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-white/80 hover:text-white p-1.5 hover:bg-white/10 rounded-lg transition-colors" title="Take Snapshot">
+<span class="material-symbols-outlined text-[20px]">photo_camera</span>
+</button>
+<button class="text-white/80 hover:text-white p-1.5 hover:bg-white/10 rounded-lg transition-colors" title="Start Recording">
+<span class="material-symbols-outlined text-[20px]">radio_button_checked</span>
+</button>
+<div class="w-px h-4 bg-white/20 mx-1"></div>
+<button class="text-white/80 hover:text-white p-1.5 hover:bg-white/10 rounded-lg transition-colors" title="Fullscreen">
+<span class="material-symbols-outlined text-[20px]">fullscreen</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Stream Quick Actions -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<button class="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-panel-dark border border-border-dark hover:border-primary/50 hover:bg-panel-dark/80 transition-all group">
+<div class="p-2 rounded-full bg-background-dark text-text-secondary group-hover:text-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">history</span>
+</div>
+<span class="text-xs font-medium text-white">Playback</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-panel-dark border border-border-dark hover:border-primary/50 hover:bg-panel-dark/80 transition-all group">
+<div class="p-2 rounded-full bg-background-dark text-text-secondary group-hover:text-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">download</span>
+</div>
+<span class="text-xs font-medium text-white">Export Clip</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-panel-dark border border-border-dark hover:border-primary/50 hover:bg-panel-dark/80 transition-all group">
+<div class="p-2 rounded-full bg-background-dark text-text-secondary group-hover:text-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">tune</span>
+</div>
+<span class="text-xs font-medium text-white">Image Settings</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-panel-dark border border-border-dark hover:border-primary/50 hover:bg-panel-dark/80 transition-all group">
+<div class="p-2 rounded-full bg-background-dark text-text-secondary group-hover:text-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<span class="text-xs font-medium text-white">ALPR Data</span>
+</button>
+</div>
+<!-- ALPR Last Read (Contextual) -->
+<div class="bg-panel-dark border border-border-dark rounded-xl p-4 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded bg-background-dark border border-border-dark flex items-center justify-center">
+<span class="material-symbols-outlined text-text-secondary">directions_car</span>
+</div>
+<div>
+<p class="text-text-secondary text-xs uppercase tracking-wide font-bold">Last Detected Plate</p>
+<p class="text-white font-mono text-xl font-bold tracking-wider">ABC-1234</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-white text-sm font-medium">South Entrance</p>
+<p class="text-text-secondary text-xs">Today, 14:24 PM</p>
+</div>
+</div>
+</div>
+<!-- Right Column: PTZ Controls (3 cols) -->
+<div class="lg:col-span-3 flex flex-col gap-6">
+<!-- PTZ Lock Card -->
+<div class="bg-panel-dark border border-border-dark rounded-xl p-5 shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 p-2 opacity-10">
+<span class="material-symbols-outlined text-6xl text-white">lock</span>
+</div>
+<h3 class="text-white text-sm font-semibold mb-3 relative z-10">PTZ Ownership</h3>
+<p class="text-text-secondary text-xs mb-4 relative z-10">Lock controls to prevent other users from moving the camera while you operate.</p>
+<label class="relative inline-flex items-center cursor-pointer z-10">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-background-dark peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+<span class="ml-3 text-sm font-medium text-white">Controls Locked (You)</span>
+</label>
+<div class="mt-4 pt-4 border-t border-border-dark flex items-center gap-2 text-xs text-success relative z-10">
+<span class="material-symbols-outlined text-[14px]">timer</span>
+<span>Auto-release in 04:59</span>
+</div>
+</div>
+<!-- PTZ Controller -->
+<div class="bg-panel-dark border border-border-dark rounded-xl p-6 shadow-sm flex flex-col items-center gap-6">
+<!-- D-Pad -->
+<div class="relative w-48 h-48 rounded-full bg-background-dark border-4 border-panel-dark shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)] flex items-center justify-center">
+<!-- Background Guides -->
+<div class="absolute inset-0 rounded-full border border-white/5 m-4"></div>
+<div class="absolute inset-0 rounded-full border border-white/5 m-12"></div>
+<!-- Stick -->
+<div class="w-16 h-16 rounded-full bg-gradient-to-b from-[#374151] to-[#1f2937] shadow-lg border border-white/10 flex items-center justify-center cursor-move active:scale-95 transition-transform z-10 relative">
+<div class="w-8 h-8 rounded-full bg-[#111827] opacity-50 shadow-inner"></div>
+</div>
+<!-- Arrows -->
+<button class="absolute top-2 left-1/2 -translate-x-1/2 text-text-secondary hover:text-white p-2">
+<span class="material-symbols-outlined">keyboard_arrow_up</span>
+</button>
+<button class="absolute bottom-2 left-1/2 -translate-x-1/2 text-text-secondary hover:text-white p-2">
+<span class="material-symbols-outlined">keyboard_arrow_down</span>
+</button>
+<button class="absolute left-2 top-1/2 -translate-y-1/2 text-text-secondary hover:text-white p-2">
+<span class="material-symbols-outlined">keyboard_arrow_left</span>
+</button>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 text-text-secondary hover:text-white p-2">
+<span class="material-symbols-outlined">keyboard_arrow_right</span>
+</button>
+</div>
+<!-- Sliders -->
+<div class="w-full space-y-5 px-2">
+<div class="space-y-2">
+<div class="flex justify-between text-xs text-text-secondary">
+<span>Zoom</span>
+<span>2.4x</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-text-secondary text-[16px]">remove</span>
+<input class="w-full h-1.5 bg-background-dark rounded-lg appearance-none cursor-pointer accent-primary" max="100" min="1" type="range" value="24"/>
+<span class="material-symbols-outlined text-text-secondary text-[16px]">add</span>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs text-text-secondary">
+<span>Focus</span>
+<span>Auto</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-text-secondary text-[16px]">center_focus_weak</span>
+<input class="w-full h-1.5 bg-background-dark rounded-lg appearance-none cursor-pointer accent-primary" max="100" min="0" type="range" value="50"/>
+<span class="material-symbols-outlined text-text-secondary text-[16px]">center_focus_strong</span>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs text-text-secondary">
+<span>Speed</span>
+<span>Fast</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-text-secondary text-[16px]">tornado</span>
+<input class="w-full h-1.5 bg-background-dark rounded-lg appearance-none cursor-pointer accent-primary" max="10" min="1" type="range" value="8"/>
+<span class="material-symbols-outlined text-text-secondary text-[16px]">speed</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Presets -->
+<div class="bg-panel-dark border border-border-dark rounded-xl p-5 shadow-sm flex-1">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-white text-sm font-semibold">Presets</h3>
+<button class="text-xs text-primary hover:text-primary-hover font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">add</span> New
+                            </button>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<button class="bg-primary text-white p-3 rounded-lg border border-primary/50 text-left relative overflow-hidden group">
+<div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="block text-xs font-semibold mb-1">Gate Overview</span>
+<span class="block text-[10px] opacity-80">Home Position</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-white rounded-full"></span>
+</button>
+<button class="bg-background-dark text-text-secondary hover:text-white p-3 rounded-lg border border-border-dark hover:border-text-secondary/50 text-left transition-all">
+<span class="block text-xs font-semibold mb-1">Plate Reader</span>
+<span class="block text-[10px] opacity-60">Zoom: 12x</span>
+</button>
+<button class="bg-background-dark text-text-secondary hover:text-white p-3 rounded-lg border border-border-dark hover:border-text-secondary/50 text-left transition-all">
+<span class="block text-xs font-semibold mb-1">Pedestrian Walk</span>
+<span class="block text-[10px] opacity-60">Left Sector</span>
+</button>
+<button class="bg-background-dark text-text-secondary hover:text-white p-3 rounded-lg border border-border-dark hover:border-text-secondary/50 text-left transition-all">
+<span class="block text-xs font-semibold mb-1">Delivery Bay</span>
+<span class="block text-[10px] opacity-60">Rear View</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

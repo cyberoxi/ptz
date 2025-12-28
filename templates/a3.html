@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Parko.ir - Camera Inventory</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;family=Noto+Sans:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0b50da",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101623",
+                        "surface-dark": "#1b2537",
+                        "surface-hover": "#222f49",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for dark mode technical look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #101623; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #222f49; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #314368; 
+        }
+        .glass-panel {
+            background: rgba(16, 22, 35, 0.95);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-hidden">
+<!-- Main Layout Wrapper -->
+<div class="flex h-screen w-full flex-col">
+<!-- Top Navbar -->
+<header class="flex flex-none items-center justify-between whitespace-nowrap border-b border-solid border-b-[#222f49] bg-[#101623] px-6 py-3 z-20">
+<div class="flex items-center gap-4 text-white">
+<div class="size-8 bg-primary/20 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-2xl">videocam</span>
+</div>
+<h2 class="text-white text-lg font-bold leading-tight tracking-tight">Parko.ir <span class="text-[#90a4cb] font-normal text-sm ml-2">Traffic Control</span></h2>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<div class="hidden md:flex items-center gap-6">
+<a class="text-[#90a4cb] hover:text-white text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-[#90a4cb] hover:text-white text-sm font-medium transition-colors" href="#">Map View</a>
+<a class="text-[#90a4cb] hover:text-white text-sm font-medium transition-colors" href="#">Alerts</a>
+<div class="h-4 w-px bg-[#222f49]"></div>
+</div>
+<div class="flex items-center gap-3">
+<button class="size-8 rounded-full bg-[#222f49] flex items-center justify-center text-[#90a4cb] hover:text-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-lg">notifications</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 ring-2 ring-[#222f49]" data-alt="User profile avatar showing a smiling person" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCzeIJOFm6M5kvdWqDVhyJaAk4wttYf79t3EXXOdDnFbbaixZo6OjxkNRbFB47tf_Mho6Z1qyqFYux2R_iA7GQNEhClV8-hBzqTtmKSe7mdy8bBsil_echP_4N3xAOAQyCdn5yku68xhbOgs5UNRogAFCmre47SlqoNERBF5pUe1VH9-EKm-ib2SOuGukl4ik9CdZv_bkL8csKPefUv5y44jHrGHs3VGM3A66o5i_Srpf0Z0_7BPHZ2b6beJLf-w_aRgUn-R_zIfD_c");'></div>
+</div>
+</div>
+</header>
+<!-- Body Content -->
+<div class="flex flex-1 overflow-hidden">
+<!-- Side Navbar -->
+<aside class="w-64 flex-none hidden lg:flex flex-col justify-between bg-[#101623] border-r border-[#222f49] p-4">
+<div class="flex flex-col gap-2">
+<div class="text-[#556987] text-xs font-bold uppercase tracking-wider mb-2 px-3">Management</div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#90a4cb] hover:bg-[#1b2537] hover:text-white transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">dashboard</span>
+<p class="text-sm font-medium leading-normal">Overview</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#0b50da]/10 text-white border-l-2 border-primary" href="#">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">format_list_bulleted</span>
+<p class="text-sm font-medium leading-normal">Inventory</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#90a4cb] hover:bg-[#1b2537] hover:text-white transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">videocam</span>
+<p class="text-sm font-medium leading-normal">Live View</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#90a4cb] hover:bg-[#1b2537] hover:text-white transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">bar_chart</span>
+<p class="text-sm font-medium leading-normal">Analytics</p>
+</a>
+<div class="my-4 h-px bg-[#222f49]"></div>
+<div class="text-[#556987] text-xs font-bold uppercase tracking-wider mb-2 px-3">System</div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#90a4cb] hover:bg-[#1b2537] hover:text-white transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">settings</span>
+<p class="text-sm font-medium leading-normal">Settings</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#90a4cb] hover:bg-[#1b2537] hover:text-white transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">support</span>
+<p class="text-sm font-medium leading-normal">Support</p>
+</a>
+</div>
+<div class="rounded-xl bg-gradient-to-br from-[#1b2537] to-[#101623] p-4 border border-[#222f49]">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-yellow-400">bolt</span>
+<span class="text-white text-xs font-bold">System Health</span>
+</div>
+<div class="w-full bg-[#222f49] rounded-full h-1.5 mb-2">
+<div class="bg-green-500 h-1.5 rounded-full" style="width: 92%"></div>
+</div>
+<p class="text-[#90a4cb] text-xs">All systems operational</p>
+</div>
+</aside>
+<!-- Main Content Scroll Area -->
+<main class="flex-1 overflow-y-auto relative bg-[#0b0f19]">
+<div class="container mx-auto max-w-[1400px] p-6 flex flex-col gap-6">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div class="flex flex-col gap-1">
+<h1 class="text-white text-3xl font-black tracking-tight">Camera Inventory</h1>
+<p class="text-[#90a4cb] text-sm">Manage onboarded cameras, monitor health status, and configure network settings.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 bg-[#222f49] hover:bg-[#2d3e5e] text-white text-sm font-bold rounded-lg transition-colors border border-[#314368]">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>Export CSV</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-blue-600 text-white text-sm font-bold rounded-lg shadow-lg shadow-blue-900/20 transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>Add Camera</span>
+</button>
+</div>
+</div>
+<!-- Stats Row -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="flex flex-col gap-1 rounded-xl bg-[#151c2b] p-5 border border-[#222f49] relative overflow-hidden group">
+<div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-5xl text-white">videocam</span>
+</div>
+<p class="text-[#90a4cb] text-xs font-medium uppercase tracking-wider">Total Cameras</p>
+<div class="flex items-end gap-2">
+<p class="text-white text-3xl font-bold leading-none">1,245</p>
+<span class="text-emerald-400 text-xs font-bold mb-1 bg-emerald-400/10 px-1.5 py-0.5 rounded flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[10px]">trending_up</span> 12
+                                </span>
+</div>
+</div>
+<div class="flex flex-col gap-1 rounded-xl bg-[#151c2b] p-5 border border-[#222f49] relative overflow-hidden group">
+<div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-5xl text-white">wifi</span>
+</div>
+<p class="text-[#90a4cb] text-xs font-medium uppercase tracking-wider">Online Status</p>
+<div class="flex items-end gap-2">
+<p class="text-white text-3xl font-bold leading-none">94.2%</p>
+<span class="text-emerald-400 text-xs font-bold mb-1 bg-emerald-400/10 px-1.5 py-0.5 rounded flex items-center gap-0.5">
+                                    +2.1%
+                                </span>
+</div>
+</div>
+<div class="flex flex-col gap-1 rounded-xl bg-[#151c2b] p-5 border border-[#222f49] relative overflow-hidden group">
+<div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-5xl text-white">health_and_safety</span>
+</div>
+<p class="text-[#90a4cb] text-xs font-medium uppercase tracking-wider">Avg Health Score</p>
+<div class="flex items-end gap-2">
+<p class="text-white text-3xl font-bold leading-none">96%</p>
+<span class="text-[#90a4cb] text-xs font-bold mb-1 bg-white/5 px-1.5 py-0.5 rounded">
+                                    Stable
+                                </span>
+</div>
+</div>
+<div class="flex flex-col gap-1 rounded-xl bg-[#151c2b] p-5 border border-[#222f49] relative overflow-hidden group">
+<div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-5xl text-white">speed</span>
+</div>
+<p class="text-[#90a4cb] text-xs font-medium uppercase tracking-wider">Avg Latency</p>
+<div class="flex items-end gap-2">
+<p class="text-white text-3xl font-bold leading-none">18<span class="text-lg font-medium text-[#90a4cb] ml-1">ms</span></p>
+<span class="text-orange-400 text-xs font-bold mb-1 bg-orange-400/10 px-1.5 py-0.5 rounded flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[10px]">arrow_drop_down</span> 2ms
+                                </span>
+</div>
+</div>
+</div>
+<!-- Filters and Search Toolbar -->
+<div class="flex flex-col lg:flex-row gap-4 bg-[#151c2b] p-4 rounded-xl border border-[#222f49]">
+<div class="flex-1 relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-[#90a4cb]">search</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-2.5 border border-[#222f49] rounded-lg leading-5 bg-[#101623] text-gray-300 placeholder-gray-500 focus:outline-none focus:bg-[#1b2537] focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm transition-colors" placeholder="Search by Camera Name, IP, or Location..." type="text"/>
+</div>
+<div class="flex flex-wrap gap-3">
+<select class="form-select block w-full sm:w-auto pl-3 pr-10 py-2.5 text-base border-none focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm rounded-lg bg-[#222f49] text-white cursor-pointer">
+<option>All Zones</option>
+<option>North Gate</option>
+<option>Parking Lot A</option>
+<option>Main Highway</option>
+</select>
+<select class="form-select block w-full sm:w-auto pl-3 pr-10 py-2.5 text-base border-none focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm rounded-lg bg-[#222f49] text-white cursor-pointer">
+<option>All Statuses</option>
+<option>Online</option>
+<option>Offline</option>
+<option>Maintenance</option>
+</select>
+<select class="form-select block w-full sm:w-auto pl-3 pr-10 py-2.5 text-base border-none focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm rounded-lg bg-[#222f49] text-white cursor-pointer">
+<option>All Models</option>
+<option>Hikvision</option>
+<option>Axis</option>
+<option>Dahua</option>
+</select>
+<button class="flex items-center justify-center px-4 py-2 bg-[#222f49] hover:bg-[#314368] text-[#90a4cb] hover:text-white rounded-lg transition-colors" title="Refresh Data">
+<span class="material-symbols-outlined">refresh</span>
+</button>
+</div>
+</div>
+<!-- Main Table -->
+<div class="bg-[#151c2b] border border-[#222f49] rounded-xl overflow-hidden shadow-xl shadow-black/20 flex flex-col flex-1 min-h-[500px]">
+<div class="overflow-x-auto">
+<table class="min-w-full divide-y divide-[#222f49]">
+<thead class="bg-[#1b2537]">
+<tr>
+<th class="px-6 py-4 text-left text-xs font-semibold text-[#90a4cb] uppercase tracking-wider w-10" scope="col">
+<input class="rounded border-[#314368] bg-[#101623] text-primary focus:ring-primary focus:ring-offset-0" type="checkbox"/>
+</th>
+<th class="px-6 py-4 text-left text-xs font-semibold text-[#90a4cb] uppercase tracking-wider" scope="col">Status</th>
+<th class="px-6 py-4 text-left text-xs font-semibold text-[#90a4cb] uppercase tracking-wider" scope="col">Camera Info</th>
+<th class="px-6 py-4 text-left text-xs font-semibold text-[#90a4cb] uppercase tracking-wider" scope="col">Location</th>
+<th class="px-6 py-4 text-left text-xs font-semibold text-[#90a4cb] uppercase tracking-wider" scope="col">Health</th>
+<th class="px-6 py-4 text-left text-xs font-semibold text-[#90a4cb] uppercase tracking-wider" scope="col">Metrics</th>
+<th class="px-6 py-4 text-left text-xs font-semibold text-[#90a4cb] uppercase tracking-wider" scope="col">Last Seen</th>
+<th class="px-6 py-4 text-right text-xs font-semibold text-[#90a4cb] uppercase tracking-wider" scope="col">Actions</th>
+</tr>
+</thead>
+<tbody class="bg-[#151c2b] divide-y divide-[#222f49]">
+<!-- Row 1 -->
+<tr class="hover:bg-[#1b2537] transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<input class="rounded border-[#314368] bg-[#101623] text-primary focus:ring-primary focus:ring-offset-0" type="checkbox"/>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+<span class="size-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                                Online
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-[#222f49] flex items-center justify-center flex-shrink-0 border border-[#314368]">
+<span class="material-symbols-outlined text-[#90a4cb]">videocam</span>
+</div>
+<div>
+<div class="text-sm font-semibold text-white">CAM-N-04</div>
+<div class="text-xs text-[#90a4cb]">192.168.1.104</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="text-sm text-gray-300">Exit Gate 2</div>
+<div class="text-xs text-[#90a4cb]">Zone A</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap align-middle">
+<div class="w-full max-w-[100px]">
+<div class="flex justify-between text-xs mb-1">
+<span class="text-emerald-400 font-bold">98%</span>
+</div>
+<div class="w-full bg-[#222f49] rounded-full h-1.5">
+<div class="bg-emerald-500 h-1.5 rounded-full" style="width: 98%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="text-sm text-white font-mono">12ms <span class="text-[#556987]">|</span> 24fps</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#90a4cb]">
+                                            Just now
+                                        </td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<button class="text-[#90a4cb] hover:text-white hover:bg-[#222f49] p-1.5 rounded transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="bg-[#101623] hover:bg-[#1b2537] transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<input class="rounded border-[#314368] bg-[#101623] text-primary focus:ring-primary focus:ring-offset-0" type="checkbox"/>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-medium bg-red-500/10 text-red-400 border border-red-500/20">
+<span class="size-1.5 rounded-full bg-red-400"></span>
+                                                Offline
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-[#222f49] flex items-center justify-center flex-shrink-0 border border-[#314368]">
+<span class="material-symbols-outlined text-[#90a4cb]">videocam_off</span>
+</div>
+<div>
+<div class="text-sm font-semibold text-white">CAM-S-12</div>
+<div class="text-xs text-[#90a4cb]">192.168.1.205</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="text-sm text-gray-300">Rear Parking</div>
+<div class="text-xs text-[#90a4cb]">Zone C</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap align-middle">
+<div class="w-full max-w-[100px]">
+<div class="flex justify-between text-xs mb-1">
+<span class="text-red-400 font-bold">0%</span>
+</div>
+<div class="w-full bg-[#222f49] rounded-full h-1.5">
+<div class="bg-red-500 h-1.5 rounded-full" style="width: 5%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="text-sm text-[#556987] font-mono">-- <span class="text-[#556987]">|</span> --</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#90a4cb]">
+                                            2 hours ago
+                                        </td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<button class="text-[#90a4cb] hover:text-white hover:bg-[#222f49] p-1.5 rounded transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-[#1b2537] transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<input class="rounded border-[#314368] bg-[#101623] text-primary focus:ring-primary focus:ring-offset-0" type="checkbox"/>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-medium bg-orange-500/10 text-orange-400 border border-orange-500/20">
+<span class="size-1.5 rounded-full bg-orange-400"></span>
+                                                Unstable
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-[#222f49] flex items-center justify-center flex-shrink-0 border border-[#314368]">
+<span class="material-symbols-outlined text-[#90a4cb]">warning</span>
+</div>
+<div>
+<div class="text-sm font-semibold text-white">CAM-E-08</div>
+<div class="text-xs text-[#90a4cb]">192.168.1.112</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="text-sm text-gray-300">Lobby Entrance</div>
+<div class="text-xs text-[#90a4cb]">Zone B</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap align-middle">
+<div class="w-full max-w-[100px]">
+<div class="flex justify-between text-xs mb-1">
+<span class="text-orange-400 font-bold">45%</span>
+</div>
+<div class="w-full bg-[#222f49] rounded-full h-1.5">
+<div class="bg-orange-500 h-1.5 rounded-full" style="width: 45%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="text-sm text-orange-300 font-mono">152ms <span class="text-[#556987]">|</span> 10fps</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#90a4cb]">
+                                            1 min ago
+                                        </td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<button class="text-[#90a4cb] hover:text-white hover:bg-[#222f49] p-1.5 rounded transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="bg-[#101623] hover:bg-[#1b2537] transition-colors group">
+<td class="px-6 py-4 whitespace-nowrap">
+<input class="rounded border-[#314368] bg-[#101623] text-primary focus:ring-primary focus:ring-offset-0" type="checkbox"/>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+<span class="size-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                                Online
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-[#222f49] flex items-center justify-center flex-shrink-0 border border-[#314368]">
+<span class="material-symbols-outlined text-[#90a4cb]">videocam</span>
+</div>
+<div>
+<div class="text-sm font-semibold text-white">CAM-W-02</div>
+<div class="text-xs text-[#90a4cb]">192.168.1.108</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="text-sm text-gray-300">West Wing Corridor</div>
+<div class="text-xs text-[#90a4cb]">Zone D</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap align-middle">
+<div class="w-full max-w-[100px]">
+<div class="flex justify-between text-xs mb-1">
+<span class="text-emerald-400 font-bold">99%</span>
+</div>
+<div class="w-full bg-[#222f49] rounded-full h-1.5">
+<div class="bg-emerald-500 h-1.5 rounded-full" style="width: 99%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="text-sm text-white font-mono">8ms <span class="text-[#556987]">|</span> 30fps</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#90a4cb]">
+                                            Just now
+                                        </td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<button class="text-[#90a4cb] hover:text-white hover:bg-[#222f49] p-1.5 rounded transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="bg-[#1b2537] px-4 py-3 border-t border-[#222f49] flex items-center justify-between">
+<div class="text-xs text-[#90a4cb]">
+                                Showing <span class="font-medium text-white">1</span> to <span class="font-medium text-white">4</span> of <span class="font-medium text-white">1,245</span> results
+                            </div>
+<div class="flex gap-2">
+<button class="px-3 py-1 bg-[#222f49] text-[#90a4cb] rounded hover:bg-[#314368] hover:text-white text-xs disabled:opacity-50" disabled="">Previous</button>
+<button class="px-3 py-1 bg-[#222f49] text-[#90a4cb] rounded hover:bg-[#314368] hover:text-white text-xs">Next</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Add Camera Drawer (Simulated as open for demo) -->
+<div class="absolute inset-y-0 right-0 w-[480px] z-50 transform transition-transform duration-300 ease-in-out shadow-2xl glass-panel border-l border-[#222f49] flex flex-col">
+<!-- Drawer Header -->
+<div class="px-6 py-4 border-b border-[#222f49] flex items-center justify-between bg-[#151c2b]">
+<h3 class="text-lg font-bold text-white">Add New Camera</h3>
+<button class="text-[#90a4cb] hover:text-white transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Drawer Content (Scrollable) -->
+<div class="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
+<!-- Section 1: General -->
+<div class="flex flex-col gap-4">
+<h4 class="text-sm font-bold text-white uppercase tracking-wider border-b border-[#222f49] pb-2">General Information</h4>
+<div class="grid grid-cols-2 gap-4">
+<div class="col-span-2">
+<label class="block text-xs font-medium text-[#90a4cb] mb-1">Camera Name</label>
+<input class="w-full bg-[#101623] border border-[#222f49] rounded-lg px-3 py-2 text-white text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="e.g. North Gate Cam 01" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-medium text-[#90a4cb] mb-1">Camera ID</label>
+<input class="w-full bg-[#101623] border border-[#222f49] rounded-lg px-3 py-2 text-white text-sm focus:border-primary outline-none" placeholder="CAM-XXX" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-medium text-[#90a4cb] mb-1">Zone / Location</label>
+<select class="w-full bg-[#101623] border border-[#222f49] rounded-lg px-3 py-2 text-white text-sm focus:border-primary outline-none">
+<option>Select Zone</option>
+<option>North Gate</option>
+<option>Parking Lot</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Section 2: Network -->
+<div class="flex flex-col gap-4">
+<h4 class="text-sm font-bold text-white uppercase tracking-wider border-b border-[#222f49] pb-2">Network Configuration</h4>
+<div class="flex flex-col gap-3">
+<div>
+<label class="block text-xs font-medium text-[#90a4cb] mb-1">RTSP Stream URL</label>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#556987]">
+<span class="material-symbols-outlined text-sm">link</span>
+</span>
+<input class="w-full bg-[#101623] border border-[#222f49] rounded-lg pl-9 pr-3 py-2 text-white text-sm focus:border-primary outline-none font-mono" placeholder="rtsp://192.168.1.xxx:554/stream" type="text"/>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-xs font-medium text-[#90a4cb] mb-1">Username</label>
+<input class="w-full bg-[#101623] border border-[#222f49] rounded-lg px-3 py-2 text-white text-sm focus:border-primary outline-none" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-medium text-[#90a4cb] mb-1">Password</label>
+<input class="w-full bg-[#101623] border border-[#222f49] rounded-lg px-3 py-2 text-white text-sm focus:border-primary outline-none" type="password"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 3: Connection Test -->
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center border-b border-[#222f49] pb-2">
+<h4 class="text-sm font-bold text-white uppercase tracking-wider">Diagnostics</h4>
+<button class="text-xs bg-[#222f49] hover:bg-[#314368] text-primary px-2 py-1 rounded transition-colors font-medium">Test Connection</button>
+</div>
+<div class="aspect-video bg-black rounded-lg border border-[#314368] flex items-center justify-center relative overflow-hidden group">
+<!-- Simulated Preview Image -->
+<div class="absolute inset-0 bg-cover bg-center opacity-40" data-alt="Camera preview simulation showing a blurry street view" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDJnmltng4CQUruTK8PQeiAMg7V_0SeQcFo2Wu71otVGTGPZhSpFW74Dtprc69hU-wrbbZ5Lq9WEcoqK3Z3Tr3ddxcfRpC3N1UuufP5M2nIjHfBu8qPQx7LkqoCxpf4Es3BD84qZjfK18YqOqVY-wMKpy34ivVgcoyy4mnRiaVCQkWPxtm8f9K7Hf3cwE6xPOLXtADt0bxgjYE6xhnptOnzGrzWVL5TQKLa_3Al7PhKiPjB70Mio0lGoGkrajZLPBzC8jlY4hZS9slj");'></div>
+<div class="z-10 flex flex-col items-center">
+<span class="material-symbols-outlined text-white/50 text-4xl mb-2">play_circle</span>
+<span class="text-xs text-white/70">Preview will appear here</span>
+</div>
+</div>
+<div class="bg-[#0b0f19] rounded-lg p-3 border border-[#222f49] h-24 overflow-y-auto font-mono text-xs">
+<div class="text-green-400">&gt; Initializing handshake...</div>
+<div class="text-green-400">&gt; Connected to 192.168.1.108:554</div>
+<div class="text-[#90a4cb]">&gt; Auth: Success (Digest)</div>
+<div class="text-[#90a4cb]">&gt; Codec: H.264, 1920x1080, 30fps</div>
+<div class="text-green-400 animate-pulse">&gt; Stream active</div>
+</div>
+</div>
+<!-- Section 4: Metadata -->
+<div class="flex flex-col gap-4">
+<h4 class="text-sm font-bold text-white uppercase tracking-wider border-b border-[#222f49] pb-2">Metadata</h4>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-xs font-medium text-[#90a4cb] mb-1">Brand</label>
+<select class="w-full bg-[#101623] border border-[#222f49] rounded-lg px-3 py-2 text-white text-sm focus:border-primary outline-none">
+<option>Hikvision</option>
+<option>Dahua</option>
+<option>Axis</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-medium text-[#90a4cb] mb-1">Model</label>
+<input class="w-full bg-[#101623] border border-[#222f49] rounded-lg px-3 py-2 text-white text-sm focus:border-primary outline-none" placeholder="DS-2CD..." type="text"/>
+</div>
+</div>
+<div>
+<label class="block text-xs font-medium text-[#90a4cb] mb-1">Notes</label>
+<textarea class="w-full bg-[#101623] border border-[#222f49] rounded-lg px-3 py-2 text-white text-sm focus:border-primary outline-none h-20 resize-none" placeholder="Maintenance notes or installation details..."></textarea>
+</div>
+</div>
+</div>
+<!-- Drawer Footer -->
+<div class="p-6 border-t border-[#222f49] bg-[#151c2b] flex gap-3">
+<button class="flex-1 px-4 py-2.5 bg-[#222f49] hover:bg-[#314368] text-white text-sm font-bold rounded-lg transition-colors border border-[#314368]">
+                    Cancel
+                </button>
+<button class="flex-1 px-4 py-2.5 bg-primary hover:bg-blue-600 text-white text-sm font-bold rounded-lg shadow-lg shadow-blue-900/20 transition-colors">
+                    Save Camera
+                </button>
+</div>
+</div>
+</div>
+</body></html>

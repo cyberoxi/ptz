@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Live Monitoring Wall - Parko.ir</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0b50da",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101623",
+                        "surface-dark": "#182234",
+                        "border-dark": "#222f49",
+                        "text-secondary": "#90a4cb"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #101623; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #222f49; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #314368; 
+        }
+        
+        .aspect-video-cam {
+            aspect-ratio: 16/9;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-white overflow-hidden h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex shrink-0 items-center justify-between whitespace-nowrap border-b border-solid border-border-dark bg-[#101623] px-6 py-3 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-white">
+<div class="size-8 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">grid_view</span>
+</div>
+<h2 class="text-white text-xl font-bold leading-tight tracking-[-0.015em]">Parko.ir</h2>
+</div>
+<!-- Global Search -->
+<label class="flex flex-col min-w-64 !h-10 max-w-80">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-surface-dark border border-border-dark group-focus-within:border-primary transition-colors">
+<div class="text-text-secondary flex items-center justify-center pl-3">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg bg-transparent text-white focus:outline-0 focus:ring-0 border-none h-full placeholder:text-text-secondary px-3 text-sm font-normal leading-normal" placeholder="Search cameras, zones, or IDs..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<!-- Operator Mode Toggle -->
+<button class="flex items-center justify-center gap-2 overflow-hidden rounded-lg h-9 px-4 bg-primary hover:bg-blue-700 transition-colors text-white text-sm font-bold leading-normal tracking-[0.015em] shadow-[0_0_15px_rgba(11,80,218,0.4)]">
+<span class="material-symbols-outlined text-[18px]">desktop_windows</span>
+<span class="truncate">Operator Mode</span>
+</button>
+<div class="h-6 w-px bg-border-dark"></div>
+<div class="flex gap-2">
+<button class="relative flex size-9 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-surface-dark hover:bg-border-dark transition-colors text-white border border-border-dark">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border border-surface-dark"></span>
+</button>
+<button class="flex size-9 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-surface-dark hover:bg-border-dark transition-colors text-white border border-border-dark">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+<button class="flex size-9 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-surface-dark hover:bg-border-dark transition-colors text-white border border-border-dark">
+<span class="material-symbols-outlined text-[20px]">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-80 flex flex-col border-r border-border-dark bg-[#101623] shrink-0 transition-all duration-300">
+<!-- Grid Layout Selector -->
+<div class="p-4 border-b border-border-dark">
+<div class="flex justify-between items-center mb-3">
+<h3 class="text-xs font-bold text-text-secondary uppercase tracking-wider">Grid Layout</h3>
+<button class="text-xs text-primary hover:text-white transition-colors">Reset</button>
+</div>
+<div class="grid grid-cols-4 gap-2">
+<button class="aspect-square flex flex-col items-center justify-center rounded bg-surface-dark border border-border-dark hover:border-primary hover:bg-border-dark transition-all group" title="1 View">
+<span class="material-symbols-outlined text-text-secondary group-hover:text-white text-lg">crop_square</span>
+</button>
+<button class="aspect-square flex flex-col items-center justify-center rounded bg-surface-dark border border-border-dark hover:border-primary hover:bg-border-dark transition-all group" title="2 Views">
+<span class="material-symbols-outlined text-text-secondary group-hover:text-white text-lg rotate-90">splitscreen</span>
+</button>
+<button class="aspect-square flex flex-col items-center justify-center rounded bg-primary border border-primary text-white shadow-lg shadow-primary/20" title="4 Views">
+<span class="material-symbols-outlined text-lg">grid_view</span>
+</button>
+<button class="aspect-square flex flex-col items-center justify-center rounded bg-surface-dark border border-border-dark hover:border-primary hover:bg-border-dark transition-all group" title="6 Views">
+<span class="material-symbols-outlined text-text-secondary group-hover:text-white text-lg">view_module</span>
+</button>
+<button class="aspect-square flex flex-col items-center justify-center rounded bg-surface-dark border border-border-dark hover:border-primary hover:bg-border-dark transition-all group" title="9 Views">
+<span class="material-symbols-outlined text-text-secondary group-hover:text-white text-lg">apps</span>
+</button>
+<button class="aspect-square flex flex-col items-center justify-center rounded bg-surface-dark border border-border-dark hover:border-primary hover:bg-border-dark transition-all group" title="12 Views">
+<span class="material-symbols-outlined text-text-secondary group-hover:text-white text-lg">grid_on</span>
+</button>
+</div>
+</div>
+<!-- Camera List Section -->
+<div class="flex-1 flex flex-col min-h-0">
+<div class="px-4 pt-4 pb-2">
+<h3 class="text-xs font-bold text-text-secondary uppercase tracking-wider mb-3">Available Cameras</h3>
+<!-- Filter Input -->
+<div class="flex w-full items-center rounded-lg bg-surface-dark border border-border-dark h-9 px-3 mb-2 focus-within:border-text-secondary transition-colors">
+<span class="material-symbols-outlined text-text-secondary text-[18px] mr-2">filter_alt</span>
+<input class="bg-transparent border-none outline-none text-sm text-white w-full placeholder:text-text-secondary/60" placeholder="Filter by zone..."/>
+</div>
+</div>
+<div class="overflow-y-auto flex-1 px-2 pb-4 space-y-1 scrollbar-hide">
+<!-- Tree Group 1 -->
+<div class="mb-2">
+<button class="flex items-center w-full px-2 py-1.5 text-xs font-medium text-text-secondary hover:text-white group">
+<span class="material-symbols-outlined text-[16px] mr-1 transition-transform group-hover:rotate-90">arrow_right</span>
+                            Zone A - North Gate
+                        </button>
+<div class="pl-4 space-y-1">
+<!-- Draggable Item -->
+<div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-dark/50 hover:bg-surface-dark cursor-grab active:cursor-grabbing border border-transparent hover:border-border-dark group transition-all" draggable="true">
+<span class="material-symbols-outlined text-text-secondary group-hover:text-primary transition-colors text-[20px]">videocam</span>
+<div class="flex-1 min-w-0">
+<p class="text-white text-sm font-medium truncate">Cam-01 Entry</p>
+<p class="text-text-secondary text-[10px] truncate">192.168.1.101</p>
+</div>
+<span class="material-symbols-outlined text-text-secondary text-[16px]">drag_indicator</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-dark/50 hover:bg-surface-dark cursor-grab active:cursor-grabbing border border-transparent hover:border-border-dark group transition-all" draggable="true">
+<span class="material-symbols-outlined text-text-secondary group-hover:text-primary transition-colors text-[20px]">videocam</span>
+<div class="flex-1 min-w-0">
+<p class="text-white text-sm font-medium truncate">Cam-02 Exit</p>
+<p class="text-text-secondary text-[10px] truncate">192.168.1.102</p>
+</div>
+<span class="material-symbols-outlined text-text-secondary text-[16px]">drag_indicator</span>
+</div>
+</div>
+</div>
+<!-- Tree Group 2 -->
+<div class="mb-2">
+<button class="flex items-center w-full px-2 py-1.5 text-xs font-medium text-text-secondary hover:text-white group">
+<span class="material-symbols-outlined text-[16px] mr-1 transition-transform group-hover:rotate-90">arrow_right</span>
+                            Zone B - Parking Lot
+                        </button>
+<div class="pl-4 space-y-1">
+<div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-dark/50 hover:bg-surface-dark cursor-grab active:cursor-grabbing border border-transparent hover:border-border-dark group transition-all" draggable="true">
+<span class="material-symbols-outlined text-text-secondary group-hover:text-primary transition-colors text-[20px]">videocam</span>
+<div class="flex-1 min-w-0">
+<p class="text-white text-sm font-medium truncate">Cam-05 L1 West</p>
+<p class="text-text-secondary text-[10px] truncate">192.168.1.105</p>
+</div>
+<span class="material-symbols-outlined text-text-secondary text-[16px]">drag_indicator</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-dark/50 hover:bg-surface-dark cursor-grab active:cursor-grabbing border border-transparent hover:border-border-dark group transition-all" draggable="true">
+<span class="material-symbols-outlined text-text-secondary group-hover:text-primary transition-colors text-[20px]">videocam</span>
+<div class="flex-1 min-w-0">
+<p class="text-white text-sm font-medium truncate">Cam-06 L1 East</p>
+<p class="text-text-secondary text-[10px] truncate">192.168.1.106</p>
+</div>
+<span class="material-symbols-outlined text-text-secondary text-[16px]">drag_indicator</span>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-dark/50 hover:bg-surface-dark cursor-grab active:cursor-grabbing border border-transparent hover:border-border-dark group transition-all" draggable="true">
+<span class="material-symbols-outlined text-red-500/80 group-hover:text-red-500 transition-colors text-[20px]">videocam_off</span>
+<div class="flex-1 min-w-0">
+<p class="text-white/60 text-sm font-medium truncate">Cam-07 L2 Main</p>
+<p class="text-red-400 text-[10px] truncate">Offline</p>
+</div>
+<span class="material-symbols-outlined text-text-secondary text-[16px]">drag_indicator</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Saved Layouts (Footer) -->
+<div class="p-4 border-t border-border-dark bg-surface-dark/30">
+<button class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary/10 border border-primary/20 hover:bg-primary/20 hover:border-primary/50 text-primary py-2 text-sm font-bold transition-all mb-3">
+<span class="material-symbols-outlined text-[18px]">save</span>
+                    Save Current Layout
+                </button>
+<h3 class="text-xs font-bold text-text-secondary uppercase tracking-wider mb-2">Saved Views</h3>
+<div class="flex flex-wrap gap-2">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-surface-dark border border-border-dark text-text-secondary hover:text-white hover:border-primary/50 cursor-pointer transition-colors">
+                        Morning Shift
+                    </span>
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-surface-dark border border-border-dark text-text-secondary hover:text-white hover:border-primary/50 cursor-pointer transition-colors">
+                        Perimeter
+                    </span>
+</div>
+</div>
+</aside>
+<!-- Main Content (Video Grid) -->
+<main class="flex-1 bg-[#0b0f17] relative overflow-y-auto p-4">
+<!-- Grid Container -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 h-full auto-rows-fr min-h-[600px]">
+<!-- Camera Tile 1 (Live) -->
+<div class="group relative flex flex-col justify-between rounded-xl bg-black overflow-hidden border border-border-dark hover:border-primary/50 transition-colors shadow-lg">
+<!-- Video Placeholder -->
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Busy urban intersection with traffic flow" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD5B1XgsXKN_yXBo5khQx-EW5OcPinDII0TkDlvrewCN7e8e0BubraYOjSB0xH6tqi7i55bErwpDTP80DLxnwImUibel-5655mzwElJ216kO6Ac4iUO32sQLyHP3r2_KKF0ur5ouneDKJX5z62w3DZHpPzl7SQyD3VUwNmkfxp5vV9lEdheJLsGWsUchCPgYpkfhVaNmvuzZtZOW6QNdwIc-6tJDQ_uPhbEmzaJTN9PNpZ6U8CW9nONLfI7183A7rHBL0a-xOoFIF6f');"></div>
+<!-- Top HUD -->
+<div class="relative z-10 flex justify-between p-3 bg-gradient-to-b from-black/80 via-black/40 to-transparent">
+<div class="flex items-start gap-2">
+<div class="bg-red-600 rounded-sm px-1.5 py-0.5 text-[10px] font-bold text-white tracking-wide uppercase flex items-center gap-1 shadow-sm">
+<span class="size-1.5 bg-white rounded-full animate-pulse"></span> REC
+                             </div>
+<div>
+<h3 class="text-white text-sm font-bold leading-none drop-shadow-md">Cam-01 North Gate</h3>
+<p class="text-[11px] text-gray-300 drop-shadow-sm mt-0.5" data-location="Tehran">Tehran, Main Blvd Entry</p>
+</div>
+</div>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-white/80 text-[18px] drop-shadow-md" title="PTZ Locked">lock</span>
+<span class="material-symbols-outlined text-white/80 text-[18px] drop-shadow-md" title="Motion Detected">motion_photos_on</span>
+</div>
+</div>
+<!-- Hover Actions Overlay -->
+<div class="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 flex items-center justify-center bg-black/40 backdrop-blur-[1px] gap-3 transition-all duration-200">
+<button class="size-10 rounded-full bg-surface-dark text-white hover:bg-primary hover:scale-110 transition-all flex items-center justify-center shadow-xl" title="Take Snapshot">
+<span class="material-symbols-outlined text-[20px]">photo_camera</span>
+</button>
+<button class="size-12 rounded-full bg-primary text-white hover:bg-blue-600 hover:scale-110 transition-all flex items-center justify-center shadow-xl border-2 border-white/10" title="Focus View">
+<span class="material-symbols-outlined text-[26px]">open_in_full</span>
+</button>
+<button class="size-10 rounded-full bg-surface-dark text-white hover:bg-red-600 hover:scale-110 transition-all flex items-center justify-center shadow-xl" title="Instant Replay">
+<span class="material-symbols-outlined text-[20px]">replay</span>
+</button>
+</div>
+<!-- Bottom Tech Stats -->
+<div class="relative z-10 flex justify-between items-end p-3 bg-gradient-to-t from-black/90 via-black/50 to-transparent pointer-events-none">
+<div class="flex flex-col">
+<p class="font-mono text-[10px] text-primary font-semibold tracking-wider">LIVE</p>
+<p class="font-mono text-[10px] text-gray-300/90 mt-0.5">30 FPS • 4.2 Mbps • 12ms</p>
+</div>
+<p class="font-mono text-[11px] text-white font-medium tabular-nums drop-shadow-md">14:23:01</p>
+</div>
+</div>
+<!-- Camera Tile 2 (Night) -->
+<div class="group relative flex flex-col justify-between rounded-xl bg-black overflow-hidden border border-border-dark hover:border-primary/50 transition-colors shadow-lg">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Dark highway view at night with car lights streaking" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDQtWKqO1iujxgaY7HVo0pbLwf0A4AcqTe1DlCqdK3CUsqLSqtNpgbGlhXZwfLgiN0XHTi7MA5P7nCSZcdKtqQJXGmisaLnMWP5yGQ2BApEbt9ONlpAJMarKTcQtiMmZwfIU9uN1OW0aWek2Mcy64Sw4ED5OZZYONra1UdKdI5zNGH_UO6XiTKNLmLCK0DEpd_8cmHFOZKECF04EpuPUd5-qCoDe5uHGeIPtBV-43BYuuUlsbemYeVVe4QnXIf2AUrjRChBn1farXAe');"></div>
+<div class="relative z-10 flex justify-between p-3 bg-gradient-to-b from-black/80 via-black/40 to-transparent">
+<div class="flex items-start gap-2">
+<div class="bg-green-600 rounded-sm px-1.5 py-0.5 text-[10px] font-bold text-white tracking-wide uppercase shadow-sm">
+                                LIVE
+                             </div>
+<div>
+<h3 class="text-white text-sm font-bold leading-none drop-shadow-md">Cam-05 Highway South</h3>
+<p class="text-[11px] text-gray-300 drop-shadow-sm mt-0.5" data-location="Los Angeles">Hwy 101, Exit 4B</p>
+</div>
+</div>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-white/50 text-[18px]" title="PTZ Unlocked">lock_open</span>
+</div>
+</div>
+<!-- Hover Actions Overlay -->
+<div class="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 flex items-center justify-center bg-black/40 backdrop-blur-[1px] gap-3 transition-all duration-200">
+<button class="size-10 rounded-full bg-surface-dark text-white hover:bg-primary hover:scale-110 transition-all flex items-center justify-center shadow-xl" title="Take Snapshot">
+<span class="material-symbols-outlined text-[20px]">photo_camera</span>
+</button>
+<button class="size-12 rounded-full bg-primary text-white hover:bg-blue-600 hover:scale-110 transition-all flex items-center justify-center shadow-xl border-2 border-white/10" title="Focus View">
+<span class="material-symbols-outlined text-[26px]">open_in_full</span>
+</button>
+<button class="size-10 rounded-full bg-surface-dark text-white hover:bg-red-600 hover:scale-110 transition-all flex items-center justify-center shadow-xl" title="Instant Replay">
+<span class="material-symbols-outlined text-[20px]">replay</span>
+</button>
+</div>
+<div class="relative z-10 flex justify-between items-end p-3 bg-gradient-to-t from-black/90 via-black/50 to-transparent pointer-events-none">
+<div class="flex flex-col">
+<p class="font-mono text-[10px] text-gray-300/90 mt-0.5">24 FPS • 3.8 Mbps • 45ms</p>
+</div>
+<p class="font-mono text-[11px] text-white font-medium tabular-nums drop-shadow-md">14:23:01</p>
+</div>
+</div>
+<!-- Camera Tile 3 (Parking) -->
+<div class="group relative flex flex-col justify-between rounded-xl bg-black overflow-hidden border border-border-dark hover:border-primary/50 transition-colors shadow-lg">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Underground concrete parking garage with parked cars" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCo3w5cgemaXr_yw-G_qMKpxj33HT2JQnEg_APDIZHyiwOIXuIw23EKjDBhjRenbKH5yOKOK5_ZtuPp29UpBOVEHEHQMunp24NIBCXzt0PLwaJp74nm3ykn_aYEoXST0VkcWC9-HUiUkIaeqEoUcSt4H1r1EZmHCJaz5Djy8dCPegPqP24fe3HYwxVd6rZIzN7sUwdZJUnGKxZPBqkLSAm6WXifZpMKFHU1cIQ_2_4z9efYEGFEAIOyOKgjDvRgGuLU0MM9WigRhs6i');"></div>
+<div class="relative z-10 flex justify-between p-3 bg-gradient-to-b from-black/80 via-black/40 to-transparent">
+<div class="flex items-start gap-2">
+<div class="bg-green-600 rounded-sm px-1.5 py-0.5 text-[10px] font-bold text-white tracking-wide uppercase shadow-sm">
+                                LIVE
+                             </div>
+<div>
+<h3 class="text-white text-sm font-bold leading-none drop-shadow-md">Cam-08 B2 Parking</h3>
+<p class="text-[11px] text-gray-300 drop-shadow-sm mt-0.5" data-location="Seattle">Sector C</p>
+</div>
+</div>
+</div>
+<!-- Hover Actions Overlay -->
+<div class="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 flex items-center justify-center bg-black/40 backdrop-blur-[1px] gap-3 transition-all duration-200">
+<button class="size-10 rounded-full bg-surface-dark text-white hover:bg-primary hover:scale-110 transition-all flex items-center justify-center shadow-xl" title="Take Snapshot">
+<span class="material-symbols-outlined text-[20px]">photo_camera</span>
+</button>
+<button class="size-12 rounded-full bg-primary text-white hover:bg-blue-600 hover:scale-110 transition-all flex items-center justify-center shadow-xl border-2 border-white/10" title="Focus View">
+<span class="material-symbols-outlined text-[26px]">open_in_full</span>
+</button>
+<button class="size-10 rounded-full bg-surface-dark text-white hover:bg-red-600 hover:scale-110 transition-all flex items-center justify-center shadow-xl" title="Instant Replay">
+<span class="material-symbols-outlined text-[20px]">replay</span>
+</button>
+</div>
+<div class="relative z-10 flex justify-between items-end p-3 bg-gradient-to-t from-black/90 via-black/50 to-transparent pointer-events-none">
+<div class="flex flex-col">
+<p class="font-mono text-[10px] text-gray-300/90 mt-0.5">15 FPS • 2.1 Mbps • 18ms</p>
+</div>
+<p class="font-mono text-[11px] text-white font-medium tabular-nums drop-shadow-md">14:23:01</p>
+</div>
+</div>
+<!-- Camera Tile 4 (Toll) -->
+<div class="group relative flex flex-col justify-between rounded-xl bg-black overflow-hidden border border-border-dark hover:border-primary/50 transition-colors shadow-lg border-primary ring-1 ring-primary">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Toll plaza with cars passing through gates" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDBIG1V97JKvL1qH7iNNkwED1wjxa1EJ2MbR8aMdc6wn27qu5F3ZD63g6Ep3dbbWM9j4wJDfjFqXimi58hcNEMqPJeOUrc5BjvRMJloVmElaXVpRjj8gGug0k7F4H_UCWBTt_37tMN31aNeSgGQeGDR-TvW1T_nedCmzbj9jXdbu_BBKofX_zYzfpojUQMx60ey2QC3yxu5G-grl_ehE-Y6T4RRW6i522IUbs8g_QpL9Cy8sQK0bD8f6lPLmwh5CfHhC9u62xdTUoFx');"></div>
+<div class="relative z-10 flex justify-between p-3 bg-gradient-to-b from-black/80 via-black/40 to-transparent">
+<div class="flex items-start gap-2">
+<div class="bg-amber-500 rounded-sm px-1.5 py-0.5 text-[10px] font-bold text-black tracking-wide uppercase shadow-sm">
+                                ALERT
+                             </div>
+<div>
+<h3 class="text-white text-sm font-bold leading-none drop-shadow-md">Cam-12 Toll Booth A</h3>
+<p class="text-[11px] text-gray-300 drop-shadow-sm mt-0.5" data-location="Chicago">I-90 Westbound</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-amber-500 text-[20px] drop-shadow-md animate-bounce" title="License Plate Alert">warning</span>
+</div>
+<!-- Hover Actions Overlay -->
+<div class="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 flex items-center justify-center bg-black/40 backdrop-blur-[1px] gap-3 transition-all duration-200">
+<button class="size-10 rounded-full bg-surface-dark text-white hover:bg-primary hover:scale-110 transition-all flex items-center justify-center shadow-xl" title="Take Snapshot">
+<span class="material-symbols-outlined text-[20px]">photo_camera</span>
+</button>
+<button class="size-12 rounded-full bg-primary text-white hover:bg-blue-600 hover:scale-110 transition-all flex items-center justify-center shadow-xl border-2 border-white/10" title="Focus View">
+<span class="material-symbols-outlined text-[26px]">open_in_full</span>
+</button>
+<button class="size-10 rounded-full bg-surface-dark text-white hover:bg-red-600 hover:scale-110 transition-all flex items-center justify-center shadow-xl" title="Instant Replay">
+<span class="material-symbols-outlined text-[20px]">replay</span>
+</button>
+</div>
+<!-- ALPR Panel -->
+<div class="relative z-10 mt-auto bg-black/80 backdrop-blur-md border-t border-border-dark p-2 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-text-secondary text-[16px]">directions_car</span>
+<span class="text-xs font-mono text-white">Detecting...</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="px-2 py-0.5 bg-white rounded text-black font-mono font-bold text-xs tracking-wider border-2 border-black">
+                                4KJL-290
+                             </div>
+</div>
+</div>
+</div>
+<!-- Camera Tile 5 (Empty/Loading) -->
+<div class="group relative flex flex-col items-center justify-center rounded-xl bg-surface-dark overflow-hidden border border-border-dark border-dashed">
+<div class="flex flex-col items-center gap-2 text-text-secondary">
+<span class="material-symbols-outlined text-4xl opacity-50">videocam_off</span>
+<p class="text-sm font-medium">Signal Lost</p>
+<button class="mt-2 text-xs text-primary hover:underline">Reconnect</button>
+</div>
+<div class="absolute top-3 left-3 flex gap-2">
+<h3 class="text-text-secondary text-sm font-bold">Cam-03 East Wing</h3>
+</div>
+</div>
+<!-- Camera Tile 6 (Add New) -->
+<div class="group relative flex flex-col items-center justify-center rounded-xl bg-[#131b2b] overflow-hidden border-2 border-border-dark border-dashed hover:border-primary/50 hover:bg-surface-dark transition-all cursor-pointer">
+<div class="flex flex-col items-center gap-2 text-text-secondary group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-4xl">add_circle</span>
+<p class="text-sm font-medium">Drop Camera Here</p>
+</div>
+</div>
+</div>
+<!-- Toast Notification -->
+<div class="absolute bottom-6 right-6 flex flex-col gap-2 z-50">
+<div class="flex w-80 items-start gap-3 rounded-lg bg-surface-dark border-l-4 border-amber-500 p-4 shadow-xl animate-[slideIn_0.5s_ease-out]">
+<span class="material-symbols-outlined text-amber-500">warning</span>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-white">Connection Unstable</h4>
+<p class="text-xs text-text-secondary mt-1">Cam-03 lost signal for 15 seconds. Attempting reconnection.</p>
+</div>
+<button class="text-text-secondary hover:text-white">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+<div class="flex w-80 items-start gap-3 rounded-lg bg-surface-dark border-l-4 border-green-500 p-4 shadow-xl animate-[slideIn_0.5s_ease-out]">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-white">Snapshot Saved</h4>
+<p class="text-xs text-text-secondary mt-1">Snapshot from Cam-01 saved to gallery.</p>
+</div>
+<button class="text-text-secondary hover:text-white">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+</div>
+</main>
+</div>
+</body></html>
